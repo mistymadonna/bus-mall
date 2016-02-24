@@ -154,4 +154,4 @@ var popularityChart = new Chart(context).PolarArea(dataforChart, {
   scaleShowLabelBackdrop : true
 });
 
-//popularityChart.scale.yLabels = ['love it', 'like it', 'meh', 'good, 'nice', 'okay', 'good job', 'love love it'];
+popularityChart.scale.yLabels = ['love it', 'like it', 'meh', 'good', 'nice', 'okay', 'good job', 'love love it'];
