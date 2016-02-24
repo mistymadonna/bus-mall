@@ -44,7 +44,7 @@
 			animation: true,
 
 			// Number - Number of animation steps
-			animationSteps: 60,
+			animationSteps: 15,
 
 			// String - Animation easing effect
 			animationEasing: "easeOutQuart",
@@ -2564,7 +2564,7 @@
 		percentageInnerCutout : 50,
 
 		//Number - Amount of animation steps
-		animationSteps : 100,
+		animationSteps : 15,
 
 		//String - Animation easing effect
 		animationEasing : "easeOutBounce",
@@ -3158,7 +3158,7 @@
 		segmentStrokeWidth : 2,
 
 		//Number - Amount of animation steps
-		animationSteps : 100,
+		animationSteps : 15,
 
 		//String - Animation easing effect.
 		animationEasing : "easeOutBounce",
