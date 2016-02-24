@@ -4,10 +4,12 @@ function randomBetween(min, max) {
 
 var images = ['bag.jpg', 'banana.jpg', 'cthulhu.jpg']
 
-for(var i = 0; i <=3; i++) {
+for(var i = 0; i <3; i++) {
   var imgEl = document.createElement('img')
   var index = randomBetween(0,2)
   var imgName = images[index]
   imgEl.src = 'img/' + imgName
   document.body.appendChild(imgEl)
 }
+
+////make sure no duplicates
