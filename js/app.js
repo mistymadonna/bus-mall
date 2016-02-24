@@ -87,3 +87,71 @@ new ItemForSale('water-can.jpg', 'Watering Can');
 new ItemForSale('wine-glass.jpg', 'Wine Glass');
 
 displayRandomImages();
+
+var externalValues = [8 ,6, 7, 4];
+var dataforChart = [
+  {
+    value: externalValues[0],
+    label: 'document.getElementById()',
+    color: 'FF3D7F',
+    highlight: '#FF9E9D'
+  },
+  {
+    value: externalValues[1],
+    label: 'Math.random()',
+    color: '#3FB8AF',
+    highlight: '#7FC7AF'
+  },
+  {
+    value: externalValues[2],
+    label: '"for" loops',
+    color: '#DAD8A7',
+    highlight: '#FFBE40'
+  },
+  {
+    value : externalValues[3],
+    label: 'constructor functions',
+    color: '#FFBE40',
+    highlight: '#EF746F'
+  },
+  {
+    value : 2,
+    label: 'function expressions',
+    color: '#FF4E50',
+    highlight: '#6B5344'
+  },
+  {
+    value : 5,
+    label: 'appendChild()',
+    color: '#A7CD2C',
+    highlight: '#BADA5F'
+  },
+  {
+    value : 8,
+    label: 'setTimeout()',
+    color: '#670D0F',
+    highlight: '#F01945'
+  },
+  {
+    value : 1,
+    label: 'this',
+    color: '#4E9995',
+    highlight: '#63E0DA'
+  }
+];
+
+var context = document.getElementById('popularity').getContext('2d');
+
+var popularityChart = new Chart(context).PolarArea(dataforChart, {
+  //Number - Amount of animation steps
+  animationSteps : 10000,
+  //String - Animation easing effect
+  animationEasing : 'easeOutBounce',
+  //Boolean - Whether we animate the rotation of the Doughnut
+  animateRotate : false,
+  //Boolean - Whether we animate scaling the Doughnut from the centre
+  animateScale : true,
+  scaleShowLabelBackdrop : true
+});
+
+//popularityChart.scale.yLabels = ['love it', 'like it', 'meh', 'good, 'nice', 'okay', 'good job', 'love love it'];
