@@ -19,6 +19,11 @@ function getRandomColor() {
     return color;
 }
 
+function shadeColor2(color, percent) {
+    var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+}
+
 function createRandomIndex() {
   return randomBetween(0, itemsArray.length - 1);
 }
@@ -47,10 +52,8 @@ function loadLocalStorage() {
   var localData = window.localStorage.getItem("ProductData");
   if (localData) {
     itemsArray = JSON.parse(localData);
-    return true;
-  } else {
-    return false;
   }
+  return itemsArray.length != 0;
 }
 
 function clearImages() {
@@ -77,7 +80,6 @@ function displayRandomImages() {
       var displayingItem = itemsArray[imgId]; // we stored the index into the img id (imgEl.id = randomIndex)
       displayingItem.clicked++;
       updateLocalStorage();
-      loadDataIntoChart();
       displayRandomImages();
     };
 
@@ -115,33 +117,35 @@ if (!loadLocalStorage()) {
 
 displayRandomImages();
 
-var dataforChart = [];
-
-function loadDataIntoChart() {
+function renderChart() {
+  var dataforChart = [];
   for (var i = 0; i < itemsArray.length; i++) {
     var item = itemsArray[i];
+    var randomColor = getRandomColor();
+    var lighterColor = shadeColor2(randomColor, 0.3)
     dataforChart.push({
       label: item.name,
       value: item.clicked,
-      color: getRandomColor()
+      color: randomColor,
+      highlight: lighterColor
     });
   }
-}
 
-loadDataIntoChart();
+  var context = document.getElementById('popularity').getContext('2d');
 
-var context = document.getElementById('popularity').getContext('2d');
+  var popularityChart = new Chart(context).PolarArea(dataforChart, {
+    //Number - Amount of animation steps
+    animationSteps : 20,
+    //String - Animation easing effect
+    animationEasing : 'easeOutBounce',
+    //Boolean - Whether we animate the rotation of the Doughnut
+    animateRotate : false,
+    //Boolean - Whether we animate scaling the Doughnut from the centre
+    animateScale : true,
+    scaleShowLabelBackdrop : true
+  });
 
-var popularityChart = new Chart(context).PolarArea(dataforChart, {
-  //Number - Amount of animation steps
-  animationSteps : 20,
-  //String - Animation easing effect
-  animationEasing : 'easeOutBounce',
-  //Boolean - Whether we animate the rotation of the Doughnut
-  animateRotate : false,
-  //Boolean - Whether we animate scaling the Doughnut from the centre
-  animateScale : true,
-  scaleShowLabelBackdrop : true
-});
+  popularityChart.scale.yLabels = ['love it', 'like it', 'meh', 'good', 'nice', 'okay', 'good job', 'love love it'];
+};
 
-popularityChart.scale.yLabels = ['love it', 'like it', 'meh', 'good', 'nice', 'okay', 'good job', 'love love it'];
+renderChart();
