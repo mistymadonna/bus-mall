@@ -10,6 +10,15 @@ function randomBetween(min, max) {
   return Math.floor((Math.random() * (max - min + 1)) + min);
 }
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[randomBetween(0, 15)];
+    }
+    return color;
+}
+
 function createRandomIndex() {
   return randomBetween(0, itemsArray.length - 1);
 }
@@ -27,6 +36,21 @@ function generateRandomIndexes() {
   }
 
   randomIndexes = [r1, r2, r3];
+}
+
+function updateLocalStorage() {
+  var localData = JSON.stringify(itemsArray);
+  window.localStorage.setItem("ProductData", localData);
+}
+
+function loadLocalStorage() {
+  var localData = window.localStorage.getItem("ProductData");
+  if (localData) {
+    itemsArray = JSON.parse(localData);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function clearImages() {
@@ -52,11 +76,12 @@ function displayRandomImages() {
       var imgId = event.target.id; // event.target is the HTML <img/> element
       var displayingItem = itemsArray[imgId]; // we stored the index into the img id (imgEl.id = randomIndex)
       displayingItem.clicked++;
-
+      updateLocalStorage();
+      loadDataIntoChart();
       displayRandomImages();
     };
 
-    document.body.appendChild(imgEl);
+    document.getElementById("imgs").appendChild(imgEl);
     randomItem.displayed++;
   }
 }
@@ -64,87 +89,52 @@ function displayRandomImages() {
 var randomIndexes;
 var itemsArray = [];
 
-// fill up itemsArray
-new ItemForSale('bag.jpg', 'Luggage');
-new ItemForSale('banana.jpg', 'Banana Slicer');
-new ItemForSale('bathroom.jpg', 'iPad/Toilet Paper Holder');
-new ItemForSale('boots.jpg', 'Open-Toed Rainboots');
-new ItemForSale('breakfast.jpg', 'Breakfast');
-new ItemForSale('bubblegum.jpg', 'Meatball');
-new ItemForSale('chair.jpg', 'Chair');
-new ItemForSale('cthulhu.jpg', 'Cthulhu');
-new ItemForSale('dog-duck.jpg', 'Dog Duck');
-new ItemForSale('dragon.jpg', 'Dragon Meat');
-new ItemForSale('pen.jpg', 'Pen');
-new ItemForSale('pet-sweep.jpg', 'Pet Sweep');
-new ItemForSale('scissors.jpg', 'Scissors');
-new ItemForSale('shark.jpg', 'Shark');
-new ItemForSale('sweep.png', 'Baby Sweeper');
-new ItemForSale('tauntaun.jpg', 'Tauntaun');
-new ItemForSale('unicorn.jpg', 'Unicorn');
-new ItemForSale('usb.gif', 'USB');
-new ItemForSale('water-can.jpg', 'Watering Can');
-new ItemForSale('wine-glass.jpg', 'Wine Glass');
+if (!loadLocalStorage()) {
+  // fill up itemsArray
+  new ItemForSale('bag.jpg', 'Luggage');
+  new ItemForSale('banana.jpg', 'Banana Slicer');
+  new ItemForSale('bathroom.jpg', 'iPad/Toilet Paper Holder');
+  new ItemForSale('boots.jpg', 'Open-Toed Rainboots');
+  new ItemForSale('breakfast.jpg', 'Breakfast');
+  new ItemForSale('bubblegum.jpg', 'Meatball');
+  new ItemForSale('chair.jpg', 'Chair');
+  new ItemForSale('cthulhu.jpg', 'Cthulhu');
+  new ItemForSale('dog-duck.jpg', 'Dog Duck');
+  new ItemForSale('dragon.jpg', 'Dragon Meat');
+  new ItemForSale('pen.jpg', 'Pen');
+  new ItemForSale('pet-sweep.jpg', 'Pet Sweep');
+  new ItemForSale('scissors.jpg', 'Scissors');
+  new ItemForSale('shark.jpg', 'Shark');
+  new ItemForSale('sweep.png', 'Baby Sweeper');
+  new ItemForSale('tauntaun.jpg', 'Tauntaun');
+  new ItemForSale('unicorn.jpg', 'Unicorn');
+  new ItemForSale('usb.gif', 'USB');
+  new ItemForSale('water-can.jpg', 'Watering Can');
+  new ItemForSale('wine-glass.jpg', 'Wine Glass');
+}
 
 displayRandomImages();
 
-var externalValues = [8 ,6, 7, 4];
-var dataforChart = [
-  {
-    value: externalValues[0],
-    label: 'document.getElementById()',
-    color: 'FF3D7F',
-    highlight: '#FF9E9D'
-  },
-  {
-    value: externalValues[1],
-    label: 'Math.random()',
-    color: '#3FB8AF',
-    highlight: '#7FC7AF'
-  },
-  {
-    value: externalValues[2],
-    label: '"for" loops',
-    color: '#DAD8A7',
-    highlight: '#FFBE40'
-  },
-  {
-    value : externalValues[3],
-    label: 'constructor functions',
-    color: '#FFBE40',
-    highlight: '#EF746F'
-  },
-  {
-    value : 2,
-    label: 'function expressions',
-    color: '#FF4E50',
-    highlight: '#6B5344'
-  },
-  {
-    value : 5,
-    label: 'appendChild()',
-    color: '#A7CD2C',
-    highlight: '#BADA5F'
-  },
-  {
-    value : 8,
-    label: 'setTimeout()',
-    color: '#670D0F',
-    highlight: '#F01945'
-  },
-  {
-    value : 1,
-    label: 'this',
-    color: '#4E9995',
-    highlight: '#63E0DA'
+var dataforChart = [];
+
+function loadDataIntoChart() {
+  for (var i = 0; i < itemsArray.length; i++) {
+    var item = itemsArray[i];
+    dataforChart.push({
+      label: item.name,
+      value: item.clicked,
+      color: getRandomColor()
+    });
   }
-];
+}
+
+loadDataIntoChart();
 
 var context = document.getElementById('popularity').getContext('2d');
 
 var popularityChart = new Chart(context).PolarArea(dataforChart, {
   //Number - Amount of animation steps
-  animationSteps : 10000,
+  animationSteps : 20,
   //String - Animation easing effect
   animationEasing : 'easeOutBounce',
   //Boolean - Whether we animate the rotation of the Doughnut
